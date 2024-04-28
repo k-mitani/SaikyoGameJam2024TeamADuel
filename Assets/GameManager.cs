@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    private static bool skipPreBattle = false;
+
     [SerializeField] private float waitShowSukiDurationMax = 3;
     [SerializeField] private GameObject suki;
     [SerializeField] private SoundManager sounds;
@@ -44,11 +46,16 @@ public class GameManager : MonoBehaviour
         sounds.PlayBgmNormal();
 
         suki.SetActive(false);
-        //StartCoroutine(PreBattle());
-
-        player1.transform.localPosition = new Vector2(-3.5f, 0);
-        player2.transform.localPosition = new Vector2(3.5f, 0);
-        StartCoroutine(ShowSuki());
+        if (skipPreBattle)
+        {
+            player1.SetInactiveAll();
+            player2.SetInactiveAll();
+            StartCoroutine(ShowSuki());
+        }
+        else
+        {
+            StartCoroutine(PreBattle());
+        }
     }
 
     private IEnumerator MoveTo(Player player, Vector2 pos)
@@ -101,13 +108,15 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(Random.value * 2);
         yield return DoBoth(p => p.FadeoutNoutou(0.3f));
         yield return new WaitForSeconds(0.1f);
-        yield return DoBoth(p => p.FadeinKamae(0.2f));
         yield return ShowSuki();
     }
 
 
     private IEnumerator ShowSuki()
     {
+        player1.transform.localPosition = new Vector2(-3.3f, 0);
+        player2.transform.localPosition = new Vector2(3.3f, 0);
+        yield return DoBoth(p => p.FadeinKamae(0.2f));
         //var wait = Random.value * waitShowSukiDurationMax;
         var wait = 0.3f;
         yield return new WaitForSeconds(wait);
@@ -296,6 +305,62 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private IEnumerator Draw()
+    {
+        isInSuki = false;
+        suki.SetActive(false);
+        sounds.SetBgmVolume(0.1f);
+        sounds.PlaySeDraw();
+
+        player1.transform.localPosition = new Vector2(3.7f, 0);
+        player2.transform.localPosition = new Vector2(-3.9f, 0);
+        player2.OnWin();
+        player1.OnWin();
+
+        background.color = new Color(0, 0, 0, 1);
+        yield return new WaitForSeconds(0.3f);
+
+        var duraMax = 0.3f;
+        var dura = 0f;
+        while (dura < duraMax)
+        {
+            dura += Time.deltaTime;
+            var v = Mathf.Lerp(0, 1, dura / duraMax);
+            background.color = new Color(v, v, v, 1);
+            player1.objectKiru.color = new Color(1, 1, 1, v);
+            player2.objectKiru.color = new Color(1, 1, 1, v);
+            yield return null;
+        }
+        background.color = new Color(1, 1, 1, 1);
+        yield return new WaitForSeconds(0.5f);
+
+        isInGameEnd = true;
+        if (!sounds.IsPlayingBgm())
+        {
+            sounds.PlayBgmNormal();
+        }
+
+        StartCoroutine(RestoreBgm());
+        IEnumerator RestoreBgm()
+        {
+            yield return new WaitForSeconds(0.5f);
+            var d = 0f;
+            var dmax = 0.5f;
+            ui.ShowDraw();
+            ui.labelDraw1.color = new Color(0, 0, 0, 0);
+            ui.labelDraw2.color = new Color(0, 0, 0, 0);
+            while (d < dmax)
+            {
+                d += Time.deltaTime;
+                var v = Mathf.Lerp(0.1f, 1, d / dmax);
+                sounds.SetBgmVolume(v);
+                ui.labelDraw1.color = new Color(0, 0, 0, v);
+                ui.labelDraw2.color = new Color(0, 0, 0, v);
+                yield return null;
+            }
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -303,6 +368,7 @@ public class GameManager : MonoBehaviour
         {
             var p1pushed = Input.GetKey(KeyCode.A);
             var p2pushed = Input.GetKey(KeyCode.L);
+            //p2pushed = p1pushed;
             // p1の勝ち
             if (p1pushed && !p2pushed)
             {
@@ -319,15 +385,12 @@ public class GameManager : MonoBehaviour
                 ui.UpdateSpeed(reactAt - sukiAt);
                 StartCoroutine(P2Win());
             }
-            // 同着、仕切り直し
+            // 引き分け
             else if (p1pushed && p2pushed)
             {
                 reactAt = Time.time;
                 ui.UpdateSpeed(reactAt - sukiAt);
-                isInSuki = false;
-                player1.FadeinKamae(0.3f);
-                player2.FadeinKamae(0.3f);
-                StartCoroutine(ShowSuki());
+                StartCoroutine(Draw());
             }
         }
         if (isInGameEnd)
@@ -338,7 +401,15 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(Retry());
                 IEnumerator Retry()
                 {
-                    sounds.PlaySeNoutou();
+                    if (p1Win || p2Win)
+                    {
+                        sounds.PlaySeNoutou();
+                        skipPreBattle = false;
+                    }
+                    else
+                    {
+                        skipPreBattle = true;
+                    }
                     yield return ui.ShowCurtain(0.2f);
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -66,7 +67,7 @@ public class Player : MonoBehaviour
         obj.gameObject.SetActive(true);
     }
 
-    private void SetInactiveAll()
+    public void SetInactiveAll()
     {
         objectNoutou.gameObject.SetActive(false);
         objectKamae.gameObject.SetActive(false);
@@ -74,5 +75,4 @@ public class Player : MonoBehaviour
         objectLoseBody.gameObject.SetActive(false);
 
     }
-
 }
