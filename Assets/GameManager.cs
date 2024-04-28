@@ -200,30 +200,92 @@ public class GameManager : MonoBehaviour
             }
             bloodEffect.color = new Color(1, 1, 1, 1);
         }
-
-        //yield return new WaitForSeconds(0.2f);
-        //yield return Util.Fadeout(player2.objectLoseHead, headFade);
-        //player2.objectLoseHead.transform.localPosition = new Vector2(-3.79f, -2.55f);
-        //player2.objectLoseHead.transform.localEulerAngles = new Vector3(0, 0, -161.8f);
-        //yield return Util.Fadein(player2.objectLoseHead, headFade * 2);
-        //yield return new WaitForSeconds(0.4f);
-        //yield return Util.Fadeout(player2.objectLoseHead, headFade * 1);
-        //player2.objectLoseHead.transform.localPosition = new Vector2(-3.61f, -2.55f);
-        //player2.objectLoseHead.transform.localEulerAngles = new Vector3(0, 0, 161.8f);
-        //yield return Util.Fadein(player2.objectLoseHead, headFade * 2);
-
-        //yield return Util.Fadeout(player2.objectLoseHead, headFade * 2);
-        //player2.objectLoseHead.transform.localPosition = new Vector2(-3.79f, -2.55f);
-        //player2.objectLoseHead.transform.localEulerAngles = new Vector3(0, 0, -161.8f);
-        //yield return Util.Fadein(player2.objectLoseHead, headFade * 2);
     }
 
     private IEnumerator P2Win()
     {
         isInSuki = false;
-        player1.OnWin();
-        player2.OnLose();
-        yield return Util.Fadein(background, 0.3f);
+        suki.SetActive(false);
+        sounds.SetBgmVolume(0.1f);
+        sounds.PlaySeKatana();
+
+        player2.transform.localPosition = new Vector2(-3.9f, 0);
+        player1.transform.localPosition = new Vector2(-1.41f, 0);
+        player2.OnWin();
+        player1.OnLose();
+        ui.ShowP2Win();
+
+        background.color = new Color(0, 0, 0, 1);
+        bloodEffect.color = new Color(1, 0, 0, 1);
+        bloodEffect.flipX = true;
+        //yield return new WaitForSeconds(0.2f);
+        bloodEffect.gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.3f);
+
+        var duraMax = 0.3f;
+        var dura = 0f;
+        while (dura < duraMax)
+        {
+            dura += Time.deltaTime;
+            var v = Mathf.Lerp(0, 1, dura / duraMax);
+            background.color = new Color(v, v, v, 1);
+            player2.objectKiru.color = new Color(1, 1, 1, v);
+            player1.objectLoseBody.color = new Color(1, 1, 1, v);
+            player1.objectLoseHead.color = new Color(1, 1, 1, v);
+            yield return null;
+        }
+        background.color = new Color(1, 1, 1, 1);
+        yield return new WaitForSeconds(0.5f);
+
+        isInGameEnd = true;
+
+        StartCoroutine(RestoreBgm());
+        IEnumerator RestoreBgm()
+        {
+            yield return new WaitForSeconds(0.5f);
+            var d = 0f;
+            var dmax = 0.5f;
+            while (d < dmax)
+            {
+                d += Time.deltaTime;
+                var v = Mathf.Lerp(0.1f, 1, d / dmax);
+                sounds.SetBgmVolume(v);
+                yield return null;
+            }
+        }
+
+        yield return new WaitForSeconds(0.75f);
+
+        var headFade = 0.2f;
+        yield return Util.Fadeout(player1.objectLoseHead, headFade);
+        player1.objectLoseHead.transform.localPosition = new Vector2(2.24f, -0.42f);
+        player1.objectLoseHead.transform.localEulerAngles = new Vector3(0, 0, 61.7f);
+        yield return Util.Fadein(player1.objectLoseHead, headFade);
+
+        yield return Util.Fadeout(player1.objectLoseHead, headFade);
+        player1.objectLoseHead.transform.localPosition = new Vector2(3.10f, -1.55f);
+        player1.objectLoseHead.transform.localEulerAngles = new Vector3(0, 0, -149.6f);
+        yield return Util.Fadein(player1.objectLoseHead, headFade);
+
+        yield return Util.Fadeout(player1.objectLoseHead, headFade);
+        player1.objectLoseHead.transform.localPosition = new Vector2(3.6f, -2.81f);
+        player1.objectLoseHead.transform.localEulerAngles = new Vector3(0, 0, -210.5f);
+        yield return Util.Fadein(player1.objectLoseHead, headFade);
+        StartCoroutine(DryBlood());
+        IEnumerator DryBlood()
+        {
+            //yield return new WaitForSeconds(0.4f);
+            var duraMax = 2.5f;
+            var dura = 0f;
+            while (dura < duraMax)
+            {
+                dura += Time.deltaTime;
+                var v = Mathf.Lerp(0, 1, dura / duraMax);
+                bloodEffect.color = new Color(1, v, v, 1);
+                yield return null;
+            }
+            bloodEffect.color = new Color(1, 1, 1, 1);
+        }
     }
 
     // Update is called once per frame
