@@ -15,12 +15,24 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+
+
         suki.SetActive(false);
         StartCoroutine(ShowSuki());
     }
 
+    private void DoBoth(System.Action<Player> action)
+    {
+        action(player1);
+        action(player2);
+    }
+
     private IEnumerator ShowSuki()
     {
+        yield return new WaitForSeconds(1);
+        DoBoth(p => p.OnKamae());
+
+
         var wait = Random.value * waitShowSukiDurationMax;
         yield return new WaitForSeconds(wait);
         isInSuki = true;

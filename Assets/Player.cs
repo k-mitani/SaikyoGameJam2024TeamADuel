@@ -4,36 +4,49 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private Sprite spriteNoutou;
-    [SerializeField] private Sprite spriteKamae;
-    [SerializeField] private Sprite spriteKiru;
-    [SerializeField] private Sprite spriteLoseBody;
-
-    [SerializeField] private Rigidbody2D loseHead;
-
-    private new SpriteRenderer renderer;
+    [SerializeField] private SpriteRenderer objectNoutou;
+    [SerializeField] private SpriteRenderer objectKamae;
+    [SerializeField] private SpriteRenderer objectKiru;
+    [SerializeField] private SpriteRenderer objectLoseBody;
+    [SerializeField] private Rigidbody2D objectLoseHead;
 
     private void Awake()
     {
-        TryGetComponent(out renderer);
-        renderer.sprite = spriteNoutou;
-        loseHead.gameObject.SetActive(false);
+        SetInactiveAll();
+        SetActiveObject(objectNoutou);
     }
 
     public void OnKamae()
     {
-        renderer.sprite = spriteKamae;
+        SetInactiveAll();
+        SetActiveObject(objectKamae);
     }
 
     public void OnWin()
     {
-        renderer.sprite = spriteKiru;
+        SetInactiveAll();
+        SetActiveObject(objectKiru);
     }
 
     public void OnLose()
     {
-        renderer.sprite = spriteLoseBody;
-        loseHead.gameObject.SetActive(true);
+        SetInactiveAll();
+        objectLoseBody.gameObject.SetActive(true);
+        objectLoseHead.gameObject.SetActive(true);
+    }
+
+    private void SetActiveObject(SpriteRenderer obj)
+    {
+        obj.gameObject.SetActive(true);
+    }
+
+    private void SetInactiveAll()
+    {
+        objectNoutou.gameObject.SetActive(false);
+        objectKamae.gameObject.SetActive(false);
+        objectKiru.gameObject.SetActive(false);
+        objectLoseBody.gameObject.SetActive(false);
+
     }
 
 }
