@@ -9,7 +9,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioSource bgmSource;
 
     [SerializeField] private AudioClip bgmNormal;
-    public void PlayBgmNormal() => PlayBgm(bgmNormal);
+    public void PlayBgmNormal() => PlayBgm(bgmNormal, loop: false);
 
 
     [SerializeField] private AudioClip seShowSuki;
@@ -22,9 +22,15 @@ public class SoundManager : MonoBehaviour
     public void PlaySeNoutou() => PlaySe(seNoutou, preCut: 0.08f, dontDestroyOnLoad: true);
 
 
-    public void PlayBgm(AudioClip clip)
+    public bool IsPlayingBgm()
+    {
+        return bgmSource.isPlaying;
+    }
+
+    public void PlayBgm(AudioClip clip, bool loop)
     {
         bgmSource.clip = clip;
+        bgmSource.loop = loop;
         bgmSource.Play();
     }
 

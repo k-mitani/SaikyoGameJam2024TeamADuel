@@ -152,6 +152,10 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         isInGameEnd = true;
+        if (!sounds.IsPlayingBgm())
+        {
+            sounds.PlayBgmNormal();
+        }
 
         StartCoroutine(RestoreBgm());
         IEnumerator RestoreBgm()
@@ -238,6 +242,10 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         isInGameEnd = true;
+        if (!sounds.IsPlayingBgm())
+        {
+            sounds.PlayBgmNormal();
+        }
 
         StartCoroutine(RestoreBgm());
         IEnumerator RestoreBgm()
