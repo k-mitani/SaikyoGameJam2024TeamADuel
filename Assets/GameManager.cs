@@ -13,6 +13,13 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private bool isInSuki = false;
 
+    [Header("歩き調整")]
+    private float preBattleFadeoutDuration = 0.3f;
+    private float preBattleWaitAfterFadeout = 0.1f;
+    private float preBattleFadeinDuration = 0.3f;
+    private float preBattleWaitAfterMove = 0.5f;
+
+
     void Start()
     {
         sounds.PlayBgmNormal();
@@ -21,25 +28,64 @@ public class GameManager : MonoBehaviour
         StartCoroutine(PreBattle());
     }
 
+    private IEnumerator MoveTo(Player player, Vector2 pos)
+    {
+        yield return player.MoveTo(
+            pos,
+            preBattleFadeoutDuration,
+            preBattleWaitAfterFadeout,
+            preBattleFadeinDuration,
+            preBattleWaitAfterMove);
+    }
+
     /// <summary>
     /// 戦闘前の移動シーン
     /// </summary>
     /// <returns></returns>
     private IEnumerator PreBattle()
     {
+        var p1End = false;
+        IEnumerator DoP1()
+        {
+            player1.transform.localPosition = new Vector2(-25, 0);
+            yield return MoveTo(player1, new Vector2(-18.8f, 0));
+            yield return MoveTo(player1, new Vector2(-13.8f, 0));
+            yield return MoveTo(player1, new Vector2(-8.8f, 0));
+            yield return MoveTo(player1, new Vector2(-3.5f, 0));
+            p1End = true;
+        }
+        StartCoroutine(DoP1());
 
+        var p2End = false;
+        IEnumerator DoP2()
+        {
+            player2.transform.localPosition = new Vector2(25, 0);
+            //yield return MoveTo(player2, new Vector2(18.8f, 0));
+            //yield return MoveTo(player2, new Vector2(13.8f, 0));
+            //yield return MoveTo(player2, new Vector2(8.8f, 0));
+            yield return MoveTo(player2, new Vector2(14.8f, 0));
+            yield return MoveTo(player2, new Vector2(10.8f, 0));
+            yield return MoveTo(player2, new Vector2(6.8f, 0));
+            yield return MoveTo(player2, new Vector2(3.5f, 0));
+            p2End = true;
+        }
+        StartCoroutine(DoP2());
 
+        while (!p1End || !p2End)
+        {
+            yield return null;
+        }
 
+        yield return new WaitForSeconds(Random.value * 2);
+        yield return DoBoth(p => p.FadeoutNoutou(0.3f));
+        yield return new WaitForSeconds(0.1f);
+        yield return DoBoth(p => p.FadeinKamae(0.2f));
         yield return ShowSuki();
     }
 
 
     private IEnumerator ShowSuki()
     {
-        // 一足一刀の位置につける。
-
-        yield return new WaitForSeconds(1);
-        DoBoth(p => p.OnKamae());
 
 
         var wait = Random.value * waitShowSukiDurationMax;
@@ -75,16 +121,39 @@ public class GameManager : MonoBehaviour
             else if (p1pushed && p2pushed)
             {
                 isInSuki = false;
-                player1.OnKamae();
-                player2.OnKamae();
+                player1.FadeinKamae(0.3f);
+                player2.FadeinKamae(0.3f);
                 StartCoroutine(ShowSuki());
             }
         }
     }
 
-    private void DoBoth(System.Action<Player> action)
+    //private void DoBoth(System.Action<Player> action)
+    //{
+    //    action(player1);
+    //    action(player2);
+    //}
+
+    private IEnumerator DoBoth(System.Func<Player, IEnumerator> action)
     {
-        action(player1);
-        action(player2);
+        var p1End = false;
+        IEnumerator DoP1()
+        {
+            yield return action(player1);
+            p1End = true;
+        }
+        StartCoroutine(DoP1());
+
+        var p2End = false;
+        IEnumerator DoP2()
+        {
+            yield return action(player2);
+            p2End = true;
+        }
+        StartCoroutine(DoP2());
+        while (!p1End || !p2End)
+        {
+            yield return null;
+        }
     }
 }
