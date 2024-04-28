@@ -125,14 +125,12 @@ public class GameManager : MonoBehaviour
             dura += Time.deltaTime;
             var v = Mathf.Lerp(0, 1, dura / duraMax);
             background.color = new Color(v, v, v, 1);
-            bloodEffect.color = new Color(1, v, v, 1);
             player1.objectKiru.color = new Color(1, 1, 1, v);
             player2.objectLoseBody.color = new Color(1, 1, 1, v);
             player2.objectLoseHead.color = new Color(1, 1, 1, v);
             yield return null;
         }
         background.color = new Color(1, 1, 1, 1);
-        bloodEffect.color = new Color(1, 1, 1, 1);
         yield return new WaitForSeconds(0.5f);
 
         StartCoroutine(RestoreBgm());
@@ -167,6 +165,22 @@ public class GameManager : MonoBehaviour
         player2.objectLoseHead.transform.localPosition = new Vector2(-3.67f, -2.55f);
         player2.objectLoseHead.transform.localEulerAngles = new Vector3(0, 0, 161.8f);
         yield return Util.Fadein(player2.objectLoseHead, headFade);
+        StartCoroutine(DryBlood());
+        IEnumerator DryBlood()
+        {
+            //yield return new WaitForSeconds(0.4f);
+            var duraMax = 2.5f;
+            var dura = 0f;
+            while (dura < duraMax)
+            {
+                dura += Time.deltaTime;
+                var v = Mathf.Lerp(0, 1, dura / duraMax);
+                bloodEffect.color = new Color(1, v, v, 1);
+                yield return null;
+            }
+            bloodEffect.color = new Color(1, 1, 1, 1);
+        }
+
         //yield return new WaitForSeconds(0.2f);
         //yield return Util.Fadeout(player2.objectLoseHead, headFade);
         //player2.objectLoseHead.transform.localPosition = new Vector2(-3.79f, -2.55f);
