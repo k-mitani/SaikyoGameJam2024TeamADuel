@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +14,10 @@ public class SoundManager : MonoBehaviour
 
     [SerializeField] private AudioClip seShowSuki;
     public void PlaySeShowSuki() => PlaySe(seShowSuki, preCut: 0.08f);
+
+    [SerializeField] private AudioClip seKatana;
+    public void PlaySeKatana() => PlaySe(seKatana, preCut: 0.08f);
+
 
     public void PlayBgm(AudioClip clip)
     {
@@ -35,4 +40,13 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public void StopBgm()
+    {
+        bgmSource.Stop();
+    }
+
+    public void SetBgmVolume(float volume)
+    {
+        bgmSource.volume = volume;
+    }
 }

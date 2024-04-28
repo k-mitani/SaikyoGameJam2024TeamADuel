@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer objectNoutou;
-    [SerializeField] private SpriteRenderer objectKamae;
-    [SerializeField] private SpriteRenderer objectKiru;
-    [SerializeField] private SpriteRenderer objectLoseBody;
-    [SerializeField] private Rigidbody2D objectLoseHead;
+    [SerializeField] public SpriteRenderer objectNoutou;
+    [SerializeField] public SpriteRenderer objectKamae;
+    [SerializeField] public SpriteRenderer objectKiru;
+    [SerializeField] public SpriteRenderer objectLoseBody;
+    [SerializeField] public SpriteRenderer objectLoseHead;
 
     public IEnumerator MoveTo(
         Vector2 localPosition,
@@ -27,41 +27,16 @@ public class Player : MonoBehaviour
 
     public IEnumerator FadeoutNoutou(float duration)
     {
-        var start = Time.time;
-        var end = start + duration;
-        while (Time.time < end)
-        {
-            var rate = (Time.time - start) / duration;
-            objectNoutou.color = new Color(1, 1, 1, 1 - rate);
-            yield return null;
-        }
-        objectNoutou.gameObject.SetActive(false);
-        objectNoutou.color = new Color(1, 1, 1, 1);
+        yield return Util.Fadeout(objectNoutou, duration);
     }
     public IEnumerator FadeinNoutou(float duration)
     {
-        yield return Fadein(objectNoutou, duration);
+        yield return Util.Fadein(objectNoutou, duration);
     }
 
     public IEnumerator FadeinKamae(float duration)
     {
-        yield return Fadein(objectKamae, duration);
-    }
-
-
-    private IEnumerator Fadein(SpriteRenderer obj, float duration)
-    {
-        obj.color = new Color(1, 1, 1, 0);
-        SetActiveObject(obj);
-        var start = Time.time;
-        var end = start + duration;
-        while (Time.time < end)
-        {
-            var rate = (Time.time - start) / duration;
-            obj.color = new Color(1, 1, 1, rate);
-            yield return null;
-        }
-        obj.color = new Color(1, 1, 1, 1);
+        yield return Util.Fadein(objectKamae, duration);
     }
 
 

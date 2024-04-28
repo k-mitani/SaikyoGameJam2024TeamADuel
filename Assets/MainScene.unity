@@ -217,7 +217,6 @@ GameObject:
   m_Component:
   - component: {fileID: 183437032}
   - component: {fileID: 183437033}
-  - component: {fileID: 183437034}
   m_Layer: 0
   m_Name: LoseHead
   m_TagString: Untagged
@@ -292,33 +291,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &183437034
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 183437031}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!1 &196569338
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,7 +301,6 @@ GameObject:
   m_Component:
   - component: {fileID: 196569339}
   - component: {fileID: 196569341}
-  - component: {fileID: 196569340}
   m_Layer: 0
   m_Name: LoseHead
   m_TagString: Untagged
@@ -344,41 +315,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 196569338}
-  m_LocalRotation: {x: -0, y: -0, z: -0.059306376, w: 0.9982399}
-  m_LocalPosition: {x: -0.1800003, y: 2.18, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.06679636, w: 0.9977666}
+  m_LocalPosition: {x: -1.45, y: 0.61, z: 0}
   m_LocalScale: {x: 0.93, y: 0.93, z: 0.93}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 994250760}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -6.8}
---- !u!50 &196569340
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 196569338}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 7.66}
 --- !u!212 &196569341
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -488,7 +432,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 92985bbb2478e2a439ff4aaddae07b21, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -550,6 +494,8 @@ MonoBehaviour:
   player1: {fileID: 1403444732}
   player2: {fileID: 994250761}
   isInSuki: 0
+  background: {fileID: 1236231354}
+  bloodEffect: {fileID: 1686200441}
 --- !u!4 &394329860
 Transform:
   m_ObjectHideFlags: 0
@@ -801,7 +747,7 @@ MonoBehaviour:
   objectKamae: {fileID: 1530189760}
   objectKiru: {fileID: 1748287460}
   objectLoseBody: {fileID: 1677146660}
-  objectLoseHead: {fileID: 196569340}
+  objectLoseHead: {fileID: 196569341}
 --- !u!1 &1019114763
 GameObject:
   m_ObjectHideFlags: 0
@@ -851,6 +797,7 @@ MonoBehaviour:
   bgmSource: {fileID: 1019114766}
   bgmNormal: {fileID: 8300000, guid: af4b7928323ef4b4ca6071f4587313f3, type: 3}
   seShowSuki: {fileID: 8300000, guid: 7b19854be26794c47936e34f57716666, type: 3}
+  seKatana: {fileID: 8300000, guid: fc0baee6f99e93e4e9b27bb8030e419b, type: 3}
 --- !u!82 &1019114766
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1172,7 +1119,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: -2
   m_Sprite: {fileID: 21300000, guid: bc24aa2481b82484a8990cd8c09bb706, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1253,7 +1200,7 @@ MonoBehaviour:
   objectKamae: {fileID: 1601570902}
   objectKiru: {fileID: 1158943538}
   objectLoseBody: {fileID: 1026711366}
-  objectLoseHead: {fileID: 183437034}
+  objectLoseHead: {fileID: 183437033}
 --- !u!1 &1530189758
 GameObject:
   m_ObjectHideFlags: 0
@@ -1615,7 +1562,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1677146658}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.84, y: -0.66, z: 0}
+  m_LocalPosition: {x: -0.84, y: -0.84, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1731,7 +1678,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 8ea52db71f044fa48a616f671201ea5c, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
