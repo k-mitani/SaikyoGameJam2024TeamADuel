@@ -1,17 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private float waitShowSukiDurationMax = 3;
     [SerializeField] private GameObject suki;
     [SerializeField] private SoundManager sounds;
+    [SerializeField] private UIManager ui;
 
     [SerializeField] private Player player1;
     [SerializeField] private Player player2;
 
     [SerializeField] private bool isInSuki = false;
+    [SerializeField] private bool isInGameEnd = false;
 
     [SerializeField] private SpriteRenderer background;
     [SerializeField] private SpriteRenderer bloodEffect;
@@ -23,8 +26,19 @@ public class GameManager : MonoBehaviour
     private float preBattleWaitAfterMove = 0.5f;
 
 
+    private float sukiAt = 0;
+    private float reactAt = 0;
+
+    private void Awake()
+    {
+        StartCoroutine(ui.HideCurtain(0.5f));
+    }
+
     void Start()
     {
+
+        ui.HideWinLabels();
+        ui.UpdateSpeed(null);
         sounds.PlayBgmNormal();
 
         suki.SetActive(false);
@@ -95,6 +109,7 @@ public class GameManager : MonoBehaviour
         //var wait = Random.value * waitShowSukiDurationMax;
         var wait = 0.3f;
         yield return new WaitForSeconds(wait);
+        sukiAt = Time.time;
         isInSuki = true;
         suki.SetActive(true);
         sounds.PlaySeShowSuki();
@@ -111,6 +126,7 @@ public class GameManager : MonoBehaviour
         player2.transform.localPosition = new Vector2(1.41f, 0);
         player1.OnWin();
         player2.OnLose();
+        ui.ShowP1Win();
 
         background.color = new Color(0, 0, 0, 1);
         bloodEffect.color = new Color(1, 0, 0, 1);
@@ -132,6 +148,8 @@ public class GameManager : MonoBehaviour
         }
         background.color = new Color(1, 1, 1, 1);
         yield return new WaitForSeconds(0.5f);
+
+        isInGameEnd = true;
 
         StartCoroutine(RestoreBgm());
         IEnumerator RestoreBgm()
@@ -216,20 +234,47 @@ public class GameManager : MonoBehaviour
             // p1の勝ち
             if (p1pushed && !p2pushed)
             {
+                reactAt = Time.time;
+                ui.UpdateSpeed(reactAt - sukiAt);
                 StartCoroutine(P1Win());
             }
             // p2の勝ち
             else if (!p1pushed && p2pushed)
             {
+                reactAt = Time.time;
+                ui.UpdateSpeed(reactAt - sukiAt);
                 StartCoroutine(P2Win());
             }
             // 同着、仕切り直し
             else if (p1pushed && p2pushed)
             {
+                reactAt = Time.time;
+                ui.UpdateSpeed(reactAt - sukiAt);
                 isInSuki = false;
                 player1.FadeinKamae(0.3f);
                 player2.FadeinKamae(0.3f);
                 StartCoroutine(ShowSuki());
+            }
+        }
+        if (isInGameEnd)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                isInGameEnd = false;
+
+                StartCoroutine(Retry());
+                IEnumerator Retry()
+                {
+                    yield return ui.ShowCurtain(0.1f);
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                }
+
+                return;
+            }
+            else if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Application.Quit();
+                return;
             }
         }
     }
