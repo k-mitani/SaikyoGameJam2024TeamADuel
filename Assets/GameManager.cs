@@ -15,20 +15,29 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
+        sounds.PlayBgmNormal();
 
         suki.SetActive(false);
-        StartCoroutine(ShowSuki());
+        StartCoroutine(PreBattle());
     }
 
-    private void DoBoth(System.Action<Player> action)
+    /// <summary>
+    /// 戦闘前の移動シーン
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator PreBattle()
     {
-        action(player1);
-        action(player2);
+
+
+
+        yield return ShowSuki();
     }
+
 
     private IEnumerator ShowSuki()
     {
+        // 一足一刀の位置につける。
+
         yield return new WaitForSeconds(1);
         DoBoth(p => p.OnKamae());
 
@@ -71,5 +80,11 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(ShowSuki());
             }
         }
+    }
+
+    private void DoBoth(System.Action<Player> action)
+    {
+        action(player1);
+        action(player2);
     }
 }

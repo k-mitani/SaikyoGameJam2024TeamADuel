@@ -5,9 +5,20 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     [SerializeField] private SoundPlayerInstant playerPrefab;
+    [SerializeField] private AudioSource bgmSource;
+
+    [SerializeField] private AudioClip bgmNormal;
+    public void PlayBgmNormal() => PlayBgm(bgmNormal);
+
 
     [SerializeField] private AudioClip seShowSuki;
     public void PlaySeShowSuki() => PlaySe(seShowSuki, preCut: 0.08f);
+
+    public void PlayBgm(AudioClip clip)
+    {
+        bgmSource.clip = clip;
+        bgmSource.Play();
+    }
 
     private void PlaySe(
         AudioClip clip,
