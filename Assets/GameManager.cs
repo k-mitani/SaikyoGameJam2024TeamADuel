@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool isInGameEnd = false;
     private bool p1Win = false;
     private bool p2Win = false;
+    private bool acceptInput = false;
+    private bool p1Disabled = false;
+    private bool p2Disabled = false;
 
     [SerializeField] private SpriteRenderer background;
     [SerializeField] private SpriteRenderer bloodEffect;
@@ -47,6 +50,7 @@ public class GameManager : MonoBehaviour
         suki.SetActive(false);
         if (skipPreBattle)
         {
+            acceptInput = true;
             player1.SetInactiveAll();
             player2.SetInactiveAll();
             StartCoroutine(ShowSuki());
@@ -88,7 +92,7 @@ public class GameManager : MonoBehaviour
             yield return MoveTo(player1, new Vector2(-18.8f, 0));
             yield return MoveTo(player1, new Vector2(-13.8f, 0));
             yield return MoveTo(player1, new Vector2(-8.8f, 0));
-            yield return MoveTo(player1, new Vector2(-3.5f, 0));
+            yield return MoveTo(player1, new Vector2(-3.3f, 0));
             p1End = true;
         }
         StartCoroutine(DoP1());
@@ -103,7 +107,7 @@ public class GameManager : MonoBehaviour
             yield return MoveTo(player2, new Vector2(14.8f, 0));
             yield return MoveTo(player2, new Vector2(10.8f, 0));
             yield return MoveTo(player2, new Vector2(6.8f, 0));
-            yield return MoveTo(player2, new Vector2(3.5f, 0));
+            yield return MoveTo(player2, new Vector2(3.3f, 0));
             p2End = true;
         }
         StartCoroutine(DoP2());
@@ -111,6 +115,8 @@ public class GameManager : MonoBehaviour
         {
             yield return null;
         }
+        
+        acceptInput = true;
 
         // 低確率で居合の段階でも隙を表示する。
         var shouldShowSuki = Random.value < 0.05f;
@@ -456,14 +462,16 @@ public class GameManager : MonoBehaviour
     {
         if (isInSuki)
         {
-            var p1pushed = Input.GetKey(KeyCode.A);
-            var p2pushed = Input.GetKey(KeyCode.L);
+            var p1pushed = !p1Disabled && Input.GetKey(KeyCode.A);
+            var p2pushed = !p2Disabled && Input.GetKey(KeyCode.L);
             //p2pushed = p1pushed;
             // p1の勝ち
             if (p1pushed && !p2pushed)
             {
                 p1Win = true;
+                acceptInput = false;
                 reactAt = Time.time;
+                player2.ResetChonbo();
                 ui.UpdateSpeed(reactAt - sukiAt);
                 StartCoroutine(P1Win());
             }
@@ -471,18 +479,53 @@ public class GameManager : MonoBehaviour
             else if (!p1pushed && p2pushed)
             {
                 p2Win = true;
+                acceptInput = false;
                 reactAt = Time.time;
+                player1.ResetChonbo();
                 ui.UpdateSpeed(reactAt - sukiAt);
                 StartCoroutine(P2Win());
             }
             // 引き分け
             else if (p1pushed && p2pushed)
             {
+                acceptInput = false;
                 reactAt = Time.time;
                 ui.UpdateSpeed(reactAt - sukiAt);
                 StartCoroutine(Draw());
             }
         }
+        else if (acceptInput)
+        {
+            // 隙でないのにキーを押してしまった場合
+            var p1pushed = Input.GetKey(KeyCode.A);
+            if (p1pushed)
+            {
+                p1Disabled = true;
+                player1.SetChonbo();
+            }
+            var p2pushed = Input.GetKey(KeyCode.L);
+            if (p2pushed)
+            {
+                p2Disabled = true;
+                player2.SetChonbo();
+            }
+            // 両方ともチョンボになった場合
+            // チョンボを解除する。
+            if (p1Disabled && p2Disabled)
+            {
+                StartCoroutine(RestoreChonbo());
+                IEnumerator RestoreChonbo()
+                {
+                    yield return new WaitForSeconds(0.1f);
+                    p1Disabled = false;
+                    player1.ResetChonbo();
+                    p2Disabled = false;
+                    player2.ResetChonbo();
+                }
+            }
+        }
+
+
         if (isInGameEnd)
         {
             if (Input.GetKeyDown(KeyCode.Space))

@@ -10,6 +10,10 @@ public class Player : MonoBehaviour
     [SerializeField] public SpriteRenderer objectKiru;
     [SerializeField] public SpriteRenderer objectLoseBody;
     [SerializeField] public SpriteRenderer objectLoseHead;
+    [SerializeField] public Canvas canvasChonbo;
+
+    [SerializeField] private Material normalMaterial;
+    [SerializeField] private Material chonboMaterial;
 
     public IEnumerator MoveTo(
         Vector2 localPosition,
@@ -74,5 +78,25 @@ public class Player : MonoBehaviour
         objectKiru.gameObject.SetActive(false);
         objectLoseBody.gameObject.SetActive(false);
 
+    }
+
+    public void SetChonbo()
+    {
+        objectNoutou.material = chonboMaterial;
+        objectKamae.material = chonboMaterial;
+        objectKiru.material = chonboMaterial;
+        objectLoseBody.material = chonboMaterial;
+        objectLoseHead.material = chonboMaterial;
+        canvasChonbo.gameObject.SetActive(true);
+    }
+
+    public void ResetChonbo()
+    {
+        objectNoutou.material = normalMaterial;
+        objectKamae.material = normalMaterial;
+        objectKiru.material = normalMaterial;
+        objectLoseBody.material = normalMaterial;
+        objectLoseHead.material = normalMaterial;
+        canvasChonbo.gameObject.SetActive(false);
     }
 }
