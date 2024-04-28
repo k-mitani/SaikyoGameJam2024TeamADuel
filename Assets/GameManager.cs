@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private bool isInSuki = false;
     [SerializeField] private bool isInGameEnd = false;
+    private bool p1Win = false;
+    private bool p2Win = false;
 
     [SerializeField] private SpriteRenderer background;
     [SerializeField] private SpriteRenderer bloodEffect;
@@ -234,6 +236,7 @@ public class GameManager : MonoBehaviour
             // p1の勝ち
             if (p1pushed && !p2pushed)
             {
+                p1Win = true;
                 reactAt = Time.time;
                 ui.UpdateSpeed(reactAt - sukiAt);
                 StartCoroutine(P1Win());
@@ -241,6 +244,7 @@ public class GameManager : MonoBehaviour
             // p2の勝ち
             else if (!p1pushed && p2pushed)
             {
+                p2Win = true;
                 reactAt = Time.time;
                 ui.UpdateSpeed(reactAt - sukiAt);
                 StartCoroutine(P2Win());
@@ -261,19 +265,24 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 isInGameEnd = false;
-
                 StartCoroutine(Retry());
                 IEnumerator Retry()
                 {
-                    yield return ui.ShowCurtain(0.1f);
+                    sounds.PlaySeNoutou();
+                    yield return ui.ShowCurtain(0.2f);
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 }
-
                 return;
             }
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Application.Quit();
+                isInGameEnd = false;
+                StartCoroutine(Exit());
+                IEnumerator Exit()
+                {
+                    yield return ui.ShowCurtain(0.1f);
+                    Application.Quit();
+                }
                 return;
             }
         }

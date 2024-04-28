@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
         float waitAfterMove
     )
     {
+        SetInactiveAll();
+        objectNoutou.gameObject.SetActive(true);
         yield return FadeoutNoutou(fadeoutDuration);
         yield return new WaitForSeconds(waitAfterFadeoutDuration);
         transform.localPosition = localPosition;

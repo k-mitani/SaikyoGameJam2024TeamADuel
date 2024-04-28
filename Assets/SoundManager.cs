@@ -18,6 +18,9 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioClip seKatana;
     public void PlaySeKatana() => PlaySe(seKatana, preCut: 0.08f);
 
+    [SerializeField] private AudioClip seNoutou;
+    public void PlaySeNoutou() => PlaySe(seNoutou, preCut: 0.08f, dontDestroyOnLoad: true);
+
 
     public void PlayBgm(AudioClip clip)
     {
