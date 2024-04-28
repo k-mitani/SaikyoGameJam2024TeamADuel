@@ -452,7 +452,9 @@ public class GameManager : MonoBehaviour
                     {
                         skipPreBattle = true;
                     }
+                    sounds.StopBgm();
                     yield return ui.ShowCurtain(0.2f);
+                    yield return new WaitForSeconds(1f);
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 }
                 return;
