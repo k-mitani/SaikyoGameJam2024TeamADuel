@@ -14,6 +14,51 @@ public class UIManager : MonoBehaviour
     [SerializeField] public TextMeshProUGUI labelDraw2;
     [SerializeField] public TextMeshProUGUI labelSpeed;
     [SerializeField] public Image curtain;
+    [SerializeField] public GameObject labelDescription;
+
+    public IEnumerator FadeinDescription(float durationMax)
+    {
+        var labels = labelDescription.GetComponentsInChildren<TextMeshProUGUI>();
+        labelDescription.SetActive(true);
+        foreach (var label in labels)
+        {
+            label.color = new Color(0, 0, 0, 0);
+        }
+
+        var duration = 0f;
+        while (duration < durationMax)
+        {
+            duration += Time.deltaTime;
+            foreach (var label in labels)
+            {
+                label.color = new Color(0, 0, 0, duration / durationMax);
+            }
+            yield return null;
+        }
+        yield return null;
+    }
+
+    public IEnumerator FadeoutDescription(float durationMax)
+    {
+        var labels = labelDescription.GetComponentsInChildren<TextMeshProUGUI>();
+        foreach (var label in labels)
+        {
+            label.color = new Color(0, 0, 0, 1);
+        }
+        var duration = 0f;
+        while (duration < durationMax)
+        {
+            duration += Time.deltaTime;
+            foreach (var label in labels)
+            {
+                label.color = new Color(0, 0, 0, 1 - duration / durationMax);
+            }
+            yield return null;
+        }
+        labelDescription.SetActive(false);
+    }
+
+
 
     public IEnumerator ShowCurtain(float durationMax)
     {

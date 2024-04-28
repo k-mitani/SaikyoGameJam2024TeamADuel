@@ -40,9 +40,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
         ui.HideWinLabels();
         ui.UpdateSpeed(null);
+        ui.labelDescription.SetActive(false);
         sounds.PlayBgmNormal();
 
         suki.SetActive(false);
@@ -74,6 +74,14 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     private IEnumerator PreBattle()
     {
+        StartCoroutine(FadeDescription());
+        IEnumerator FadeDescription()
+        {
+            yield return ui.FadeinDescription(0.1f);
+            yield return new WaitForSeconds(3.3f);
+            yield return ui.FadeoutDescription(0.5f);
+
+        }
         var p1End = false;
         IEnumerator DoP1()
         {
