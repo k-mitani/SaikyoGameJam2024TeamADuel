@@ -8,7 +8,9 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] public GameObject labelP1Win;
+    [SerializeField] public TextMeshProUGUI labelP1WinRetry;
     [SerializeField] public GameObject labelP2Win;
+    [SerializeField] public TextMeshProUGUI labelP2WinRetry;
     [SerializeField] public GameObject labelDraw;
     [SerializeField] public TextMeshProUGUI labelDraw1;
     [SerializeField] public TextMeshProUGUI labelDraw2;

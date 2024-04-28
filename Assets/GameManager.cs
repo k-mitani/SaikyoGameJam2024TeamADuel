@@ -140,6 +140,7 @@ public class GameManager : MonoBehaviour
         suki.SetActive(false);
         sounds.SetBgmVolume(0.1f);
         sounds.PlaySeKatana();
+        ui.labelP1WinRetry.gameObject.SetActive(false);
 
         player1.transform.localPosition = new Vector2(3.7f, 0);
         player2.transform.localPosition = new Vector2(1.41f, 0);
@@ -221,6 +222,22 @@ public class GameManager : MonoBehaviour
             }
             bloodEffect.color = new Color(1, 1, 1, 1);
         }
+
+        StartCoroutine(ShowRetryLabel());
+        IEnumerator ShowRetryLabel()
+        {
+            yield return new WaitForSeconds(0.5f);
+            ui.labelP1WinRetry.gameObject.SetActive(true);
+            var duraMax = 0.2f;
+            var dura = 0f;
+            while (dura < duraMax)
+            {
+                dura += Time.deltaTime;
+                var v = Mathf.Lerp(0, 1, dura / duraMax);
+                ui.labelP1WinRetry.color = new Color(0, 0, 0, v);
+                yield return null;
+            }
+        }
     }
 
     private IEnumerator P2Win()
@@ -229,6 +246,7 @@ public class GameManager : MonoBehaviour
         suki.SetActive(false);
         sounds.SetBgmVolume(0.1f);
         sounds.PlaySeKatana();
+        ui.labelP2WinRetry.gameObject.SetActive(false);
 
         player2.transform.localPosition = new Vector2(-3.9f, 0);
         player1.transform.localPosition = new Vector2(-1.41f, 0);
@@ -310,6 +328,22 @@ public class GameManager : MonoBehaviour
                 yield return null;
             }
             bloodEffect.color = new Color(1, 1, 1, 1);
+        }
+
+        StartCoroutine(ShowRetryLabel());
+        IEnumerator ShowRetryLabel()
+        {
+            yield return new WaitForSeconds(0.5f);
+            ui.labelP2WinRetry.gameObject.SetActive(true);
+            var duraMax = 0.2f;
+            var dura = 0f;
+            while (dura < duraMax)
+            {
+                dura += Time.deltaTime;
+                var v = Mathf.Lerp(0, 1, dura / duraMax);
+                ui.labelP2WinRetry.color = new Color(0, 0, 0, v);
+                yield return null;
+            }
         }
     }
 

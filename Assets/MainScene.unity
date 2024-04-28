@@ -3109,7 +3109,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -525, y: 437}
+  m_AnchoredPosition: {x: -512, y: 437}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1685380639
@@ -3733,7 +3733,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   labelP1Win: {fileID: 956860565}
+  labelP1WinRetry: {fileID: 1685380639}
   labelP2Win: {fileID: 626905939}
+  labelP2WinRetry: {fileID: 308772224}
   labelDraw: {fileID: 1935665074}
   labelDraw1: {fileID: 1294483849}
   labelDraw2: {fileID: 812904280}
