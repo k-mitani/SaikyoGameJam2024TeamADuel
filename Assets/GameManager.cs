@@ -353,6 +353,7 @@ public class GameManager : MonoBehaviour
         suki.SetActive(false);
         sounds.SetBgmVolume(0.1f);
         sounds.PlaySeDraw();
+        ui.labelDraw2.gameObject.SetActive(false);
 
         player1.transform.localPosition = new Vector2(3.7f, 0);
         player2.transform.localPosition = new Vector2(-3.9f, 0);
@@ -390,15 +391,29 @@ public class GameManager : MonoBehaviour
             var dmax = 0.5f;
             ui.ShowDraw();
             ui.labelDraw1.color = new Color(0, 0, 0, 0);
-            ui.labelDraw2.color = new Color(0, 0, 0, 0);
             while (d < dmax)
             {
                 d += Time.deltaTime;
                 var v = Mathf.Lerp(0.1f, 1, d / dmax);
                 sounds.SetBgmVolume(v);
                 ui.labelDraw1.color = new Color(0, 0, 0, v);
-                ui.labelDraw2.color = new Color(0, 0, 0, v);
                 yield return null;
+            }
+
+            StartCoroutine(ShowRetryLabel());
+            IEnumerator ShowRetryLabel()
+            {
+                yield return new WaitForSeconds(1.5f);
+                ui.labelDraw2.gameObject.SetActive(true);
+                var duraMax = 0.2f;
+                var dura = 0f;
+                while (dura < duraMax)
+                {
+                    dura += Time.deltaTime;
+                    var v = Mathf.Lerp(0, 1, dura / duraMax);
+                    ui.labelDraw2.color = new Color(0, 0, 0, v);
+                    yield return null;
+                }
             }
         }
     }
