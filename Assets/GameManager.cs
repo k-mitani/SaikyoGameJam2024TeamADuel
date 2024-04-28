@@ -7,7 +7,6 @@ public class GameManager : MonoBehaviour
 {
     private static bool skipPreBattle = false;
 
-    [SerializeField] private float waitShowSukiDurationMax = 3;
     [SerializeField] private GameObject suki;
     [SerializeField] private SoundManager sounds;
     [SerializeField] private UIManager ui;
@@ -113,21 +112,55 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        yield return new WaitForSeconds(Random.value * 2);
-        yield return DoBoth(p => p.FadeoutNoutou(0.3f));
-        yield return new WaitForSeconds(0.1f);
-        yield return ShowSuki();
+        // 低確率で居合の段階でも隙を表示する。
+        var shouldShowSuki = Random.value < 0.05f;
+        if (shouldShowSuki)
+        {
+            yield return new WaitForSeconds(Random.value * 2);
+            if (Random.value < 0.05f)
+            {
+                yield return new WaitForSeconds(Random.value * 2);
+            }
+            SetSuki();
+        }
+        // 通常の流れ
+        else
+        {
+            yield return new WaitForSeconds(Random.value * 2);
+            if (Random.value < 0.05f)
+            {
+                yield return new WaitForSeconds(Random.value * 2);
+            }
+            yield return DoBoth(p => p.FadeoutNoutou(0.3f));
+            yield return new WaitForSeconds(0.1f);
+            yield return ShowSuki();
+        }
     }
-
 
     private IEnumerator ShowSuki()
     {
         player1.transform.localPosition = new Vector2(-3.3f, 0);
         player2.transform.localPosition = new Vector2(3.3f, 0);
         yield return DoBoth(p => p.FadeinKamae(0.2f));
-        //var wait = Random.value * waitShowSukiDurationMax;
-        var wait = 0.3f;
-        yield return new WaitForSeconds(wait);
+
+        var forDebug = false;
+        if (forDebug)
+        {
+            yield return new WaitForSeconds(0.3f);
+            SetSuki();
+            yield break;
+        }
+
+        yield return new WaitForSeconds(Random.value * 10);
+        if (Random.value < 0.5f)
+        {
+            yield return new WaitForSeconds(Random.value * 10);
+        }
+        SetSuki();
+    }
+
+    private void SetSuki()
+    {
         sukiAt = Time.time;
         isInSuki = true;
         suki.SetActive(true);
