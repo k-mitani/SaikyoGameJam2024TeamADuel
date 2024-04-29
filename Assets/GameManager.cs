@@ -186,10 +186,10 @@ public class GameManager : MonoBehaviour
             yield break;
         }
 
-        yield return new WaitForSeconds(Random.value * 10);
+        yield return new WaitForSeconds(Random.value * 5);
         if (Random.value < 0.5f)
         {
-            yield return new WaitForSeconds(Random.value * 10);
+            yield return new WaitForSeconds(Random.value * 5);
         }
         SetSuki();
     }
