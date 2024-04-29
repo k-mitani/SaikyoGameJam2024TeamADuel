@@ -51,8 +51,6 @@ public class GameManager : MonoBehaviour
             ui.webglCurtain.SetActive(false);
             canStartGame = true;
         }
-        ui.webglCurtain.SetActive(true);
-        canStartGame = false;
 #else
         ui.webglCurtain.SetActive(false);
         canStartGame = true;
