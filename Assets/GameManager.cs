@@ -211,6 +211,7 @@ public class GameManager : MonoBehaviour
                 continue;
             }
             SetSuki();
+            yield break;
         }
     }
 
