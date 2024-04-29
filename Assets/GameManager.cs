@@ -26,7 +26,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SpriteRenderer background;
     [SerializeField] private SpriteRenderer bloodEffect;
 
-    [Header("歩き調整")]
+    [SerializeField] private Bird prefabPelicanSmall;
+    [SerializeField] private Bird prefabPelicanBig;
+
     private float preBattleFadeoutDuration = 0.3f;
     private float preBattleWaitAfterFadeout = 0.1f;
     private float preBattleFadeinDuration = 0.3f;
@@ -178,6 +180,8 @@ public class GameManager : MonoBehaviour
         player2.transform.localPosition = new Vector2(3.3f, 0);
         yield return DoBoth(p => p.FadeinKamae(0.2f));
 
+        StartCoroutine(SpawnBird());
+
         var forDebug = false;
         if (forDebug)
         {
@@ -192,6 +196,22 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(Random.value * 5);
         }
         SetSuki();
+    }
+
+    private IEnumerator SpawnBird()
+    {
+        // 微妙なので無効にする。
+        yield break;
+        while (acceptInput)
+        {
+            yield return new WaitForSeconds(1.5f);
+            if (Random.value < 0.1)
+            {
+                var obj = Instantiate(prefabPelicanBig);
+                obj.Initialize();
+                sounds.PlaySeBird();
+            }
+        }
     }
 
     private void SetSuki()

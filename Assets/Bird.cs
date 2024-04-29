@@ -1,18 +1,40 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Bird : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public bool moveToRight = true;
+    public float speed = 1;
+
+    public void Initialize()
     {
-        
+        moveToRight = Random.value < 0.5f;
+        if (moveToRight)
+        {
+            var pos = transform.position;
+            pos.x = -11;
+            transform.position = pos;
+            TryGetComponent<SpriteRenderer>(out var r);
+            r.flipX = true;
+        }
+        else
+        {
+            var pos = transform.position;
+            pos.x = 11;
+            transform.position = pos;
+        }
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
-        transform.position += Vector3.right * 0.1f;
+        if (moveToRight)
+        {
+            transform.position += speed * Time.deltaTime * Vector3.right;
+        }
+        else
+        {
+            transform.position += speed * Time.deltaTime * Vector3.left;
+        }
     }
 }
