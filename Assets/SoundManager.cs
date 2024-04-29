@@ -26,6 +26,10 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioClip seBird;
     public void PlaySeBird() => PlaySe(seBird, preCut: 0.08f);
 
+    [SerializeField] private AudioClip seFake;
+    public void PlaySeFake() => PlaySe(seFake, preCut: 0.08f);
+    [SerializeField] private AudioClip seFake2;
+    public void PlaySeFake2() => PlaySe(seFake2, preCut: 0.08f);
 
 
     public bool IsPlayingBgm()

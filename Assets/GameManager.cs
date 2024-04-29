@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     private static bool needWebglCurtain = true;
 
     [SerializeField] private GameObject suki;
+    [SerializeField] private GameObject fake;
     [SerializeField] private SoundManager sounds;
     [SerializeField] private UIManager ui;
 
@@ -190,12 +191,27 @@ public class GameManager : MonoBehaviour
             yield break;
         }
 
-        yield return new WaitForSeconds(Random.value * 5);
-        if (Random.value < 0.5f)
+
+        var fakeProb = 0.2f;
+        while (true)
         {
-            yield return new WaitForSeconds(Random.value * 5);
+            yield return new WaitForSeconds(Random.value * 2.5f);
+            fake.SetActive(false);
+            yield return new WaitForSeconds(Random.value * 2.5f);
+            if (Random.value < 0.45f)
+            {
+                yield return new WaitForSeconds(Random.value * 5);
+            }
+
+            if (Random.value < fakeProb)
+            {
+                fakeProb /= 2;
+                ShowFake();
+                yield return new WaitForSeconds(0.3f);
+                continue;
+            }
+            SetSuki();
         }
-        SetSuki();
     }
 
     private IEnumerator SpawnBird()
@@ -214,8 +230,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void ShowFake()
+    {
+        fake.SetActive(true);
+        if (Random.value < 0.5f)
+        {
+            sounds.PlaySeFake();
+        }
+        else
+        {
+            sounds.PlaySeFake2();
+        }
+    }
+
     private void SetSuki()
     {
+        fake.SetActive(false);
         sukiAt = Time.time;
         isInSuki = true;
         suki.SetActive(true);
