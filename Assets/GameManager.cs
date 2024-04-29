@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviour
         acceptInput = true;
 
         // 低確率で居合の段階でも隙を表示する。
-        var shouldShowSuki = Random.value < 0.05f;
+        var shouldShowSuki = Random.value < 0.15f;
         if (shouldShowSuki)
         {
             yield return new WaitForSeconds(Random.value * 2);
