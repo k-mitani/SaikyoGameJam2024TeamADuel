@@ -344,6 +344,9 @@ public class GameManager : MonoBehaviour
         StartCoroutine(DryBlood());
         IEnumerator DryBlood()
         {
+            // 雨が降っているなら乾かさない。
+            if (rainPlaying) yield break;
+
             //yield return new WaitForSeconds(0.4f);
             var duraMax = 2.5f;
             var dura = 0f;
@@ -451,6 +454,9 @@ public class GameManager : MonoBehaviour
         StartCoroutine(DryBlood());
         IEnumerator DryBlood()
         {
+            // 雨が降っているなら乾かさない。
+            if (rainPlaying) yield break;
+
             //yield return new WaitForSeconds(0.4f);
             var duraMax = 2.5f;
             var dura = 0f;
