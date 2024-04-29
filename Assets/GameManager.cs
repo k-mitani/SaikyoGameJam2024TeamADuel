@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Bird prefabPelicanSmall;
     [SerializeField] private Bird prefabPelicanBig;
 
+    [SerializeField] private ParticleSystem rain;
+
     private float preBattleFadeoutDuration = 0.3f;
     private float preBattleWaitAfterFadeout = 0.1f;
     private float preBattleFadeinDuration = 0.3f;
@@ -39,6 +41,7 @@ public class GameManager : MonoBehaviour
 
     private float sukiAt = 0;
     private float reactAt = 0;
+    private bool rainPlaying = false;
 
     private void Awake()
     {
@@ -192,7 +195,7 @@ public class GameManager : MonoBehaviour
         }
 
 
-        var fakeProb = 0.33f;
+        var fakeProb = 0.45f;
         while (true)
         {
             yield return new WaitForSeconds(Random.value * 2.5f);
@@ -205,8 +208,20 @@ public class GameManager : MonoBehaviour
 
             if (Random.value < fakeProb)
             {
-                fakeProb /= 2;
-                ShowFake();
+                fakeProb /= 1.75f;
+
+                if (Random.value < 0.5f && !rainPlaying)
+                {
+                    rainPlaying = true;
+                    rain.gameObject.SetActive(true);
+                    rain.Play();
+                    sounds.PlayBgmRain();
+                }
+                else
+                {
+                    ShowFake();
+                }
+
                 yield return new WaitForSeconds(0.3f);
                 continue;
             }

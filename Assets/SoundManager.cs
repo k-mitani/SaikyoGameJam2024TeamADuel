@@ -10,7 +10,8 @@ public class SoundManager : MonoBehaviour
 
     [SerializeField] private AudioClip bgmNormal;
     public void PlayBgmNormal() => PlayBgm(bgmNormal, loop: false);
-
+    [SerializeField] private AudioClip bgmRain;
+    public void PlayBgmRain() => PlayBgm(bgmRain, true);
 
     [SerializeField] private AudioClip seShowSuki;
     public void PlaySeShowSuki() => PlaySe(seShowSuki, preCut: 0.08f);
@@ -30,7 +31,6 @@ public class SoundManager : MonoBehaviour
     public void PlaySeFake() => PlaySe(seFake, preCut: 0.08f);
     [SerializeField] private AudioClip seFake2;
     public void PlaySeFake2() => PlaySe(seFake2, preCut: 0.08f);
-
 
     public bool IsPlayingBgm()
     {
