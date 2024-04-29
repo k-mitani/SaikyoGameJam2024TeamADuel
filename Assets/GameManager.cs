@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private static bool skipPreBattle = false;
+    private static bool needWebglCurtain = true;
 
     [SerializeField] private GameObject suki;
     [SerializeField] private SoundManager sounds;
@@ -31,17 +32,47 @@ public class GameManager : MonoBehaviour
     private float preBattleFadeinDuration = 0.3f;
     private float preBattleWaitAfterMove = 0.5f;
 
+    private bool canStartGame = false;
 
     private float sukiAt = 0;
     private float reactAt = 0;
 
     private void Awake()
     {
-        StartCoroutine(ui.HideCurtain(0.5f));
+#if UNITY_WEBGL
+        if (needWebglCurtain)
+        {
+            ui.webglCurtain.SetActive(true);
+            canStartGame = false;
+            needWebglCurtain = false;
+        }
+        else
+        {
+            ui.webglCurtain.SetActive(false);
+            canStartGame = true;
+        }
+        ui.webglCurtain.SetActive(true);
+        canStartGame = false;
+#else
+        ui.webglCurtain.SetActive(false);
+        canStartGame = true;
+#endif
     }
 
     void Start()
     {
+        StartCoroutine(StartGame());
+    }
+
+    private IEnumerator StartGame()
+    {
+        while (!canStartGame)
+        {
+            yield return null;
+        }
+        ui.webglCurtain.SetActive(false);
+        
+        StartCoroutine(ui.HideCurtain(0.5f));
         ui.HideWinLabels();
         ui.UpdateSpeed(null);
         ui.labelDescription.SetActive(false);
@@ -560,6 +591,14 @@ public class GameManager : MonoBehaviour
                     Application.Quit();
                 }
                 return;
+            }
+        }
+
+        if (!canStartGame)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                canStartGame = true;
             }
         }
     }

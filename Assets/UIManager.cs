@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] public TextMeshProUGUI labelSpeed;
     [SerializeField] public Image curtain;
     [SerializeField] public GameObject labelDescription;
+    [SerializeField] public GameObject webglCurtain;
 
     public IEnumerator FadeinDescription(float durationMax)
     {
