@@ -192,7 +192,7 @@ public class GameManager : MonoBehaviour
         }
 
 
-        var fakeProb = 0.2f;
+        var fakeProb = 0.33f;
         while (true)
         {
             yield return new WaitForSeconds(Random.value * 2.5f);
